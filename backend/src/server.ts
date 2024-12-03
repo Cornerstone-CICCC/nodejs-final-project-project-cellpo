@@ -1,6 +1,10 @@
+// src / server.ts
 import express, { Response, Request } from "express";
-import mongoose from "mongoose";
+import cors from "cors";
+import cookieSession from "cookie-session";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+
 import userRouter from "./routes/user.routes";
 
 dotenv.config();
@@ -9,13 +13,30 @@ dotenv.config();
 const app = express();
 
 // Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cookieSession({
+    name: "session",
+    keys: [
+      process.env.COOKIE_SIGN_KEY ?? "default_sign_key",
+      process.env.COOKIE_ENCRYPT_KEY ?? "default_encrypt_key",
+    ],
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
 
 // Router
 app.use("/api/users", userRouter);
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).end("hello Cellpo");
+app.use((req: Request, res: Response) => {
+  res.status(404).send("Access denied.");
 });
 
 // Connect to MongoDB and Start Server
