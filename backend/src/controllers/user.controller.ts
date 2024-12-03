@@ -11,6 +11,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Unable to get all Users" });
   }
 };
+//test
 
 export default {
   getAllUsers,
