@@ -28,7 +28,6 @@ const SignIn = () => {
     const data = await res.json();
     if (res.ok) {
       navigate("/play");
-      console.log("test");
     } else {
       setErrorMessage(data.message || "Failed to log in");
       console.error("Error:", data.message);
