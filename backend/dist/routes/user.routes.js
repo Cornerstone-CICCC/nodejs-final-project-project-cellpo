@@ -13,7 +13,6 @@ userRouter.get("/logout", auth_1.checkAuth, user_controller_1.default.logoutUser
 userRouter.get("/:id", auth_1.checkAuth, user_controller_1.default.getUserById);
 userRouter.post("/register", user_controller_1.default.registerUser);
 userRouter.post("/login", user_controller_1.default.loginUser);
-// userRouter.post("/logout", checkAuth, userController.logoutUser);
 userRouter.put("/:id", auth_1.checkAuth, user_controller_1.default.updateUser);
 userRouter.delete("/:id", auth_1.checkAuth, user_controller_1.default.deleteUserById);
 exports.default = userRouter;
