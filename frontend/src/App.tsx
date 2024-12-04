@@ -7,7 +7,7 @@ import Header from "./feaatures/Header";
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="bg-stone-300 h-screen">
+      <div className="h-screen bg-stone-300">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
