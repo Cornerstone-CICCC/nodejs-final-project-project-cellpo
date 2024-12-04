@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const About: React.FC = () => {
+const Play: React.FC = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
 
@@ -55,4 +55,4 @@ const About: React.FC = () => {
   );
 };
 
-export default About;
+export default Play;

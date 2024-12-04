@@ -87,6 +87,7 @@ const loginUser = async (
 ): Promise<void> => {
   try {
     const { username, password } = req.body;
+    console.log(req.body);
 
     if (!username || !password) {
       res.status(400).json({ message: "Username and password are required." });
@@ -94,6 +95,7 @@ const loginUser = async (
     }
 
     const user = await User.findOne({ username });
+    console.log(user);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -104,7 +106,7 @@ const loginUser = async (
       res.status(403).json({ message: "Password is incorrect" });
       return;
     }
-
+    
     (req as AuthenticatedRequest).session!.isAuthenticated = true;
     (req as AuthenticatedRequest).session!.userId = user.id.toString();
 

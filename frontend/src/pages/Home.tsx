@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div>
-      <h1 className="mt-6 text-3xl font-extrabold text-center">
+      <h1 className="mt-6 text-3xl font-extrabold text-center font-MICRO">
         Welcome to Home Page
       </h1>
       <Link
