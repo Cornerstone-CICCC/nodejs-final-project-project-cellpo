@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User, IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
+import userRouter from "../routes/user.routes";
 
 // 型定義の追加
 interface AuthenticatedRequest extends Request {
@@ -87,7 +88,6 @@ const loginUser = async (
 ): Promise<void> => {
   try {
     const { username, password } = req.body;
-    console.log(req.body);
 
     if (!username || !password) {
       res.status(400).json({ message: "Username and password are required." });
@@ -106,7 +106,7 @@ const loginUser = async (
       res.status(403).json({ message: "Password is incorrect" });
       return;
     }
-    
+
     (req as AuthenticatedRequest).session!.isAuthenticated = true;
     (req as AuthenticatedRequest).session!.userId = user.id.toString();
 
@@ -145,7 +145,7 @@ const userProfile = async (
 // Logout
 const logoutUser = (req: AuthenticatedRequest, res: Response): void => {
   try {
-    req.session = null;
+    (req as AuthenticatedRequest).session! = null;
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     console.error("Logout User Error:", err);
