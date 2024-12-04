@@ -88,9 +88,8 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(403).json({ message: "Password is incorrect" });
             return;
         }
-        // const findUser = await User.findOne({ username, password });
         req.session.isAuthenticated = true;
-        req.session.userId = user === null || user === void 0 ? void 0 : user._id.toString();
+        req.session.userId = user.id.toString();
         res.json({ message: "Login successful" });
     }
     catch (error) {
