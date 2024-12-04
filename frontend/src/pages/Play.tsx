@@ -5,8 +5,10 @@ const Play: React.FC = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
 
-  const logOut = async (): Promise<void> => {
+  const logOut = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
     await fetch(`http://localhost:3010/api/users/logout`, {
+      method: "GET",
       credentials: "include",
     });
     navigate("/signIn");
@@ -44,6 +46,7 @@ const Play: React.FC = () => {
     <div>
       <h1 className="mt-1 text-3xl font-extrabold text-center">{title}</h1>
       <button
+        type="submit"
         onClick={logOut}
         className="px-2 ml-5 border-2 border-blue-600 rounded-md hover:text-gray-50 hover:bg-blue-600 "
       >

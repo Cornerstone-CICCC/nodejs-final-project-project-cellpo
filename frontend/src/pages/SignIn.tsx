@@ -53,12 +53,7 @@ const SignIn = () => {
       }),
     });
     const data = await res.json();
-    console.log("テスト", data);
-    // if (data.message === "User created") {
-    //   setFrag((prev) => !prev);
-    // } else {
-    //   setErrorMessage("The Username is already used");
-    // }
+    console.log(data);
   };
 
   const fragHandle = () => {

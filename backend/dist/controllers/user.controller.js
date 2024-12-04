@@ -72,7 +72,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
-        console.log(req.body);
         if (!username || !password) {
             res.status(400).json({ message: "Username and password are required." });
             return;
