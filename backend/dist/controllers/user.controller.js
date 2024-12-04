@@ -17,18 +17,18 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 // Get all users
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield user_model_1.User.find();
+        const users = yield user_model_1.User.find().select("-password");
         res.status(200).json(users);
     }
     catch (err) {
         console.error("Get Users Error:", err);
-        res.status(500).json({ error: "Unable to get students" });
+        res.status(500).json({ error: "Unable to get users" });
     }
 });
 // Get user by id
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_model_1.User.findById(req.params);
+        const user = yield user_model_1.User.findById(req.params.id).select("-password");
         if (!user) {
             res.status(404).json({ error: "User not found" });
             return;
@@ -37,7 +37,7 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.error("Get User By ID Error:", error);
-        res.status(500).json({ error: `Unable to get the student` });
+        res.status(500).json({ error: `Unable to get the user` });
     }
 });
 // Register
@@ -57,9 +57,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const newUser = new user_model_1.User({
             username,
             password: hashedPassword,
-            matches: 0,
-            win: 0,
-            signUpDate: new Date(),
         });
         yield newUser.save();
         const userToReturn = newUser.toObject();
@@ -68,7 +65,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         console.error("Register User Error:", error);
-        res.status(500).json({ error: "Unable to add student" });
+        res.status(500).json({ error: "Unable to register user" });
     }
 });
 // Login
@@ -86,7 +83,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const isMatch = yield bcrypt_1.default.compare(password, user.password);
         if (!isMatch) {
-            res.status(403).json({ message: "Passwords do not match" });
+            res.status(403).json({ message: "Password is incorrect" });
             return;
         }
         req.session.isAuthenticated = true;
@@ -100,13 +97,14 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Profile
 const userProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const { userId } = req.session;
+        const userId = (_a = req.session) === null || _a === void 0 ? void 0 : _a.userId;
         if (!userId) {
             res.status(401).json({ message: "Unauthorized" });
             return;
         }
-        const user = yield user_model_1.User.findById(userId);
+        const user = yield user_model_1.User.findById(userId).select("-password");
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
@@ -121,7 +119,7 @@ const userProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // Logout
 const logoutUser = (req, res) => {
     try {
-        req.session = { isAuthenticated: false, userId: "" };
+        req.session = null;
         res.status(200).json({ message: "Logged out successfully" });
     }
     catch (err) {
@@ -134,25 +132,27 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const user = yield user_model_1.User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
-        });
+        }).select("-password");
         if (!user) {
-            res.status(404).json({ error: `The student does not exist` });
+            res.status(404).json({ error: `The user does not exist` });
+            return;
         }
-        res.status(200).json({ message: "Update user successfully" });
+        res.status(200).json({ message: "Update user successfully", user });
     }
     catch (err) {
         console.error("Failed to update user:", err);
-        res.status(500).json({ error: `Unable to update the student` });
+        res.status(500).json({ error: `Unable to update the user` });
     }
 });
 // Delete user by id
 const deleteUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_model_1.User.findByIdAndDelete(req.params.id);
+        const user = yield user_model_1.User.findByIdAndDelete(req.params.id).select("-password");
         if (!user) {
             res.status(404).json({ error: "The user does not exist" });
+            return;
         }
-        res.status(200).json({ message: "Delete the user", user });
+        res.status(200).json({ message: "Deleted the user", user });
     }
     catch (err) {
         console.error(err);
@@ -166,4 +166,6 @@ exports.default = {
     loginUser,
     userProfile,
     logoutUser,
+    updateUser,
+    deleteUserById,
 };

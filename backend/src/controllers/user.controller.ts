@@ -1,16 +1,26 @@
-// src/controllers/user.controller.ts
 import { Request, Response } from "express";
 import { User, IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
 
+// 型定義の追加
+interface AuthenticatedRequest extends Request {
+  session?:
+    | {
+        isAuthenticated?: boolean;
+        userId?: string;
+        [key: string]: any;
+      }
+    | any;
+}
+
 // Get all users
 const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    const users = await User.find();
+    const users = await User.find().select("-password");
     res.status(200).json(users);
   } catch (err) {
     console.error("Get Users Error:", err);
-    res.status(500).json({ error: "Unable to get students" });
+    res.status(500).json({ error: "Unable to get users" });
   }
 };
 
@@ -20,7 +30,7 @@ const getUserById = async (
   res: Response
 ): Promise<void> => {
   try {
-    const user = await User.findById(req.params);
+    const user = await User.findById(req.params.id).select("-password");
     if (!user) {
       res.status(404).json({ error: "User not found" });
       return;
@@ -28,13 +38,13 @@ const getUserById = async (
     res.status(200).json(user);
   } catch (error) {
     console.error("Get User By ID Error:", error);
-    res.status(500).json({ error: `Unable to get the student` });
+    res.status(500).json({ error: `Unable to get the user` });
   }
 };
 
 // Register
 const registerUser = async (
-  req: Request<{}, {}, Omit<IUser, "matches" | "win" | "signUpDate" | "_id">>,
+  req: Request<{}, {}, { username: string; password: string }>,
   res: Response
 ): Promise<void> => {
   try {
@@ -56,9 +66,6 @@ const registerUser = async (
     const newUser: IUser = new User({
       username,
       password: hashedPassword,
-      matches: 0,
-      win: 0,
-      signUpDate: new Date(),
     });
 
     await newUser.save();
@@ -69,13 +76,13 @@ const registerUser = async (
     res.status(201).json(userToReturn);
   } catch (error) {
     console.error("Register User Error:", error);
-    res.status(500).json({ error: "Unable to add student" });
+    res.status(500).json({ error: "Unable to register user" });
   }
 };
 
 // Login
 const loginUser = async (
-  req: Request<{}, {}, Omit<IUser, "matches" | "win" | "signUpDate" | "_id">>,
+  req: Request<{}, {}, { username: string; password: string }>,
   res: Response
 ): Promise<void> => {
   try {
@@ -94,12 +101,12 @@ const loginUser = async (
 
     const isMatch: boolean = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(403).json({ message: "Passwords do not match" });
+      res.status(403).json({ message: "Password is incorrect" });
       return;
     }
 
-    req.session!.isAuthenticated = true;
-    req.session!.userId = user.id.toString();
+    (req as AuthenticatedRequest).session!.isAuthenticated = true;
+    (req as AuthenticatedRequest).session!.userId = user.id.toString();
 
     res.json({ message: "Login successful" });
   } catch (error) {
@@ -109,15 +116,18 @@ const loginUser = async (
 };
 
 // Profile
-const userProfile = async (req: Request, res: Response): Promise<void> => {
+const userProfile = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
   try {
-    const { userId }: any = req.session;
+    const userId = req.session?.userId;
     if (!userId) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -131,9 +141,9 @@ const userProfile = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Logout
-const logoutUser = (req: Request, res: Response): void => {
+const logoutUser = (req: AuthenticatedRequest, res: Response): void => {
   try {
-    req.session = { isAuthenticated: false, userId: "" };
+    req.session = null;
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     console.error("Logout User Error:", err);
@@ -142,28 +152,33 @@ const logoutUser = (req: Request, res: Response): void => {
 };
 
 // Update user
-const updateUser = async (req: Request, res: Response) => {
+const updateUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    });
+    }).select("-password");
     if (!user) {
-      res.status(404).json({ error: `The student does not exist` });
+      res.status(404).json({ error: `The user does not exist` });
+      return;
     }
-    res.status(200).json({ message: "Update user successfully" });
+    res.status(200).json({ message: "Update user successfully", user });
   } catch (err) {
     console.error("Failed to update user:", err);
-    res.status(500).json({ error: `Unable to update the student` });
+    res.status(500).json({ error: `Unable to update the user` });
   }
 };
+
 // Delete user by id
-const deleteUserById = async (req: Request, res: Response) => {
+const deleteUserById = async (req: Request<{ id: string }>, res: Response) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndDelete(req.params.id).select(
+      "-password"
+    );
     if (!user) {
       res.status(404).json({ error: "The user does not exist" });
+      return;
     }
-    res.status(200).json({ message: "Delete the user", user });
+    res.status(200).json({ message: "Deleted the user", user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Unable to delete the user" });
@@ -177,4 +192,6 @@ export default {
   loginUser,
   userProfile,
   logoutUser,
+  updateUser,
+  deleteUserById,
 };
