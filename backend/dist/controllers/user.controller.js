@@ -75,11 +75,13 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
+        console.log(req.body);
         if (!username || !password) {
             res.status(400).json({ message: "Username and password are required." });
             return;
         }
         const user = yield user_model_1.User.findOne({ username });
+        console.log(user);
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
@@ -89,8 +91,9 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(403).json({ message: "Passwords do not match" });
             return;
         }
+        // const findUser = await User.findOne({ username, password });
         req.session.isAuthenticated = true;
-        req.session.userId = user.id.toString();
+        req.session.userId = user === null || user === void 0 ? void 0 : user._id.toString();
         res.json({ message: "Login successful" });
     }
     catch (error) {

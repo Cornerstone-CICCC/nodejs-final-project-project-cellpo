@@ -34,6 +34,7 @@ const SignIn = () => {
       console.error("Error:", data.message);
     }
   };
+
   const signUpForm = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -60,10 +61,12 @@ const SignIn = () => {
     //   setErrorMessage("The Username is already used");
     // }
   };
+
   const fragHandle = () => {
     setFrag((prev) => !prev);
     setErrorMessage("");
   };
+
   return (
     <div>
       <div className=" min-[500px]:mt-16 min-[500px]:w-[400px] w-[90%] bg-gray-200 mx-auto rounded-md mt-2">
