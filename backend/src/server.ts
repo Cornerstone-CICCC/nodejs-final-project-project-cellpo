@@ -4,8 +4,10 @@ import cors from "cors";
 import cookieSession from "cookie-session";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import gameSocket from "./sockets/game.socket";
 
 import userRouter from "./routes/user.routes";
+import { createServer, Server } from "http";
 
 dotenv.config();
 
@@ -39,6 +41,15 @@ app.use((req: Request, res: Response) => {
   res.status(404).send("Access denied.");
 });
 
+// Create HTTP server and attach Socket.IO
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
 // Connect to MongoDB and Start Server
 const PORT = process.env.PORT || 3010;
 const MONGO_URI = process.env.MONGO_DB!;
@@ -46,6 +57,10 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
+
+    // Start Socket.IO
+    gameSocket(io);
+
     app.listen(PORT, () =>
       console.log(`Server is running on http://localhost:${PORT}`)
     );
