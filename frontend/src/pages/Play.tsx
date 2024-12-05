@@ -16,7 +16,7 @@ const Play: React.FC = () => {
 
   const loadProfile = async (): Promise<void> => {
     try {
-      const res = await fetch(`http://localhost:3010/api/users/profile`, {
+      const res = await fetch(`http://localhost:3010/api/users/play`, {
         credentials: "include",
       });
 

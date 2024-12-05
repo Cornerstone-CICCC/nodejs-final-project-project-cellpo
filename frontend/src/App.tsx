@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Play from "./pages/Play";
-import Header from "./feaatures/Header";
+import Header from "./features/Header";
 
 const App = () => {
   return (
