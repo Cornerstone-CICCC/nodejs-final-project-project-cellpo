@@ -10,7 +10,8 @@ const cors_1 = __importDefault(require("cors"));
 const cookie_session_1 = __importDefault(require("cookie-session"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const game_socket_1 = __importDefault(require("./sockets/game.socket"));
+const game_socket_1 = require("./sockets/game.socket");
+const socket_io_1 = require("socket.io");
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const http_1 = require("http");
 dotenv_1.default.config();
@@ -38,7 +39,7 @@ app.use((req, res) => {
 });
 // Create HTTP server and attach Socket.IO
 const server = (0, http_1.createServer)(app);
-const io = new http_1.Server(server, {
+const io = new socket_io_1.Server(server, {
     cors: {
         origin: "http://http://localhost:5173",
         methods: ["GET", "POST"],
@@ -52,7 +53,7 @@ mongoose_1.default
     .then(() => {
     console.log("Connected to MongoDB");
     // Start Socket.IO
-    (0, game_socket_1.default)(io);
+    (0, game_socket_1.setupGameSocket)(io);
     app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
 })
     .catch((err) => console.error("Failed to connect to MongoDB", err));

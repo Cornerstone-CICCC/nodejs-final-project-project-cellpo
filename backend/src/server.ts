@@ -4,10 +4,11 @@ import cors from "cors";
 import cookieSession from "cookie-session";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import gameSocket from "./sockets/game.socket";
+import { setupGameSocket } from "./sockets/game.socket";
+import { Server } from "socket.io";
 
 import userRouter from "./routes/user.routes";
-import { createServer, Server } from "http";
+import { createServer } from "http";
 
 dotenv.config();
 
@@ -59,7 +60,7 @@ mongoose
     console.log("Connected to MongoDB");
 
     // Start Socket.IO
-    gameSocket(io);
+    setupGameSocket(io);
 
     app.listen(PORT, () =>
       console.log(`Server is running on http://localhost:${PORT}`)

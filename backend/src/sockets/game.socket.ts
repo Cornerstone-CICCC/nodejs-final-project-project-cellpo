@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 
-const setupGameSocket = (io: Server) => {
+export const setupGameSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
     // On connect
     console.log(`User connected: ${socket.id}`);
