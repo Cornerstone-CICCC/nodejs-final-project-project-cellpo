@@ -6,8 +6,7 @@ const Play: React.FC = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
 
-  const logOut = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
+  const logOut = async (): Promise<void> => {
     await fetch(`http://localhost:3010/api/users/logout`, {
       method: "GET",
       credentials: "include",
