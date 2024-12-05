@@ -7,7 +7,7 @@ const Header = () => {
         <img src="/tic-tac-toe_logo.png" alt="logo" className="w-14 h-14 p-2" />
       </NavLink>
       <NavLink to={"/signIn"} className="text-stone-300 text-lg">
-        Sing In
+        Sign In
       </NavLink>
     </nav>
   );

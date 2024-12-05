@@ -90,6 +90,7 @@ const Game: React.FC = () => {
               cursor: "pointer",
               backgroundColor: cell ? "#d3d3d3" : "#fff",
             }}
+            className="hover:bg-slate-400"
           >
             {cell}
           </div>

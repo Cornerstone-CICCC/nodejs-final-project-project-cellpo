@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Game from "../components/Game";
 
 const Play: React.FC = () => {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ const Play: React.FC = () => {
       </button>
 
       <div>Play right now</div>
+
+      <Game />
     </div>
   );
 };
