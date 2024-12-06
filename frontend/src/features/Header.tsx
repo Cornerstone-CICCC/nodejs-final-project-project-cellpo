@@ -2,11 +2,11 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
-    <nav className="flex justify-between bg-slate-700 items-center px-10 font-MICRO">
+    <nav className="flex items-center justify-between w-full px-10 bg-slate-700 font-MICRO">
       <NavLink to={"/"}>
-        <img src="/tic-tac-toe_logo.png" alt="logo" className="w-14 h-14 p-2" />
+        <img src="/tic-tac-toe_logo.png" alt="logo" className="p-2 w-14 h-14" />
       </NavLink>
-      <NavLink to={"/signIn"} className="text-stone-300 text-lg">
+      <NavLink to={"/signIn"} className="text-lg text-stone-300">
         Sign In
       </NavLink>
     </nav>
