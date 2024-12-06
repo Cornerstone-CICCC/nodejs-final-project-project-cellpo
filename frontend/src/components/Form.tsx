@@ -5,21 +5,20 @@ interface FormProps {
 }
 const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
   return (
-    <div className="">
-      <h2 className="w-full pt-3 mt-5 mb-5 text-3xl font-semibold text-center">
+    <div className="px-8">
+      <h2 className="py-8 text-5xl font-semibold font-MICRO">
         {frag ? "Sign Up" : "Log In"}
       </h2>
-      <p className="w-[70%] mx-auto mb-4 text-center">
-        Hi, Enter your details.to get {frag ? "sign up" : "log in"} to your
-        account
-      </p>
+
       <form action="" className="w-full" onSubmit={onSubmit}>
+        <label htmlFor="username" className="text-3xl font-MICRO">
+          Username
+        </label>
         <input
           type="text"
           name="username"
           id="username"
           autoComplete="off"
-          placeholder="Enter username"
           required
           className={`${
             errorMessage === "User not found" ? "border-rose-500" : ""
@@ -27,22 +26,25 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
             errorMessage === "The Username is already used"
               ? "border-rose-500"
               : ""
-          } block w-[90%] pl-2 mx-auto border-2 rounded-md mb-3`}
+          } block w-[90%] border-2 bg-stone-700 border-none outline-none p-1 mb-8`}
         />
+        <label htmlFor="password" className="text-3xl font-MICRO">
+          Password
+        </label>
         <input
           type="password"
           name="password"
           id="password"
           autoComplete="off"
-          placeholder="Enter password"
           required
           className={`${
             errorMessage === "Passwords do not match" ? "border-rose-500" : ""
-          } block w-[90%] pl-2 mx-auto border-2 rounded-md mb-3`}
+          } block w-[90%] bg-stone-700 border-2 border-none outline-none p-1 mb-8`}
         />
+
         <button
           type="submit"
-          className="bg-blue-400 text-white w-[90%] mx-auto block rounded-md mb-3"
+          className="p-2 px-4 text-2xl bg-blue-700 text-stone-200 font-MICRO"
         >
           {frag ? "Sing Up" : "Log In"}
         </button>

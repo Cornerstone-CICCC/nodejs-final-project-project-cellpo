@@ -1,18 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import Header from "./features/Header";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Play from "./pages/Play";
-import Header from "./features/Header";
+import Rank from "./pages/Rank";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="h-screen bg-stone-300">
-        <Header />
+      <Header />
+      <div className="h-screen bg-stone-800">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/play" element={<Play />} />
+          <Route path="/rank" element={<Rank />} />
         </Routes>
       </div>
     </BrowserRouter>

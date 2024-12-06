@@ -62,8 +62,8 @@ const SignIn = () => {
   };
 
   return (
-    <div>
-      <div className=" min-[500px]:mt-16 min-[500px]:w-[400px] w-[90%] bg-gray-200 mx-auto rounded-md mt-2">
+    <main className="pt-20 bg-stone-800">
+      <section className="text-stone-200">
         <Form
           onSubmit={frag ? signUpForm : loginForm}
           frag={frag}
@@ -75,17 +75,21 @@ const SignIn = () => {
           </div>
         )}
 
-        <div className="text-[.8rem] text-center pb-3">
+        <article className="pb-3 text-3xl text-center font-MICRO">
           {frag ? "Have an account?" : "Don't have any account?"}
           <span
             onClick={fragHandle}
-            className="font-bold cursor-pointer hover:underline"
+            className="font-bold cursor-pointer hover:underline hover:text-red-300"
           >
-            {frag ? " Log In" : " Sing Up"}
+            {frag ? (
+              <span className="text-red-300 font-MICRO"> Log In</span>
+            ) : (
+              <span className="text-red-300 font-MICRO"> Sing Up</span>
+            )}
           </span>
-        </div>
-      </div>
-    </div>
+        </article>
+      </section>
+    </main>
   );
 };
 
