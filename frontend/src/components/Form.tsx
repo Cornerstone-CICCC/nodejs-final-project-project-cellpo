@@ -5,8 +5,8 @@ interface FormProps {
 }
 const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
   return (
-    <div className="">
-      <h2 className="p-10 text-5xl font-semibold font-MICRO">
+    <div className="px-8">
+      <h2 className="py-8 text-5xl font-semibold font-MICRO">
         {frag ? "Sign Up" : "Log In"}
       </h2>
 
@@ -26,7 +26,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
             errorMessage === "The Username is already used"
               ? "border-rose-500"
               : ""
-          } block w-[90%] border-2 bg-stone-700 border-none outline-none p-1`}
+          } block w-[90%] border-2 bg-stone-700 border-none outline-none p-1 mb-8`}
         />
         <label htmlFor="password" className="text-3xl font-MICRO">
           Password
@@ -39,7 +39,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
           required
           className={`${
             errorMessage === "Passwords do not match" ? "border-rose-500" : ""
-          } block w-[90%] bg-stone-700 border-2 border-none outline-none p-1`}
+          } block w-[90%] bg-stone-700 border-2 border-none outline-none p-1 mb-8`}
         />
 
         <button

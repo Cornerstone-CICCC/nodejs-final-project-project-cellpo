@@ -75,13 +75,17 @@ const SignIn = () => {
           </div>
         )}
 
-        <article className="text-[.8rem] text-center pb-3">
+        <article className="pb-3 text-3xl text-center font-MICRO">
           {frag ? "Have an account?" : "Don't have any account?"}
           <span
             onClick={fragHandle}
-            className="font-bold cursor-pointer hover:underline"
+            className="font-bold cursor-pointer hover:underline hover:text-red-300"
           >
-            {frag ? " Log In" : " Sing Up"}
+            {frag ? (
+              <span className="text-red-300 font-MICRO"> Log In</span>
+            ) : (
+              <span className="text-red-300 font-MICRO"> Sing Up</span>
+            )}
           </span>
         </article>
       </section>
