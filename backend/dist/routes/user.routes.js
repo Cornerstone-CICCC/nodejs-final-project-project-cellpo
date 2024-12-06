@@ -10,6 +10,7 @@ const userRouter = (0, express_1.Router)();
 userRouter.get("/play", auth_1.checkAuth, user_controller_1.default.userProfile);
 userRouter.get("/", auth_1.checkAuth, user_controller_1.default.getAllUsers);
 userRouter.get("/logout", auth_1.checkAuth, user_controller_1.default.logoutUser);
+userRouter.get("/ranking", user_controller_1.default.getTopThreeUsers);
 userRouter.get("/:id", auth_1.checkAuth, user_controller_1.default.getUserById);
 userRouter.post("/register", user_controller_1.default.registerUser);
 userRouter.post("/login", user_controller_1.default.loginUser);

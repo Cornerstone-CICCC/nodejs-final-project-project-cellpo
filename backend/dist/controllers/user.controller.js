@@ -151,6 +151,20 @@ const deleteUserById = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ error: "Unable to delete the user" });
     }
 });
+// get the top 3 user for ranking
+const getTopThreeUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topFiveUsers = yield user_model_1.User.find()
+            .sort({ win: -1 })
+            .limit(3)
+            .select("username matches win");
+        res.status(200).json(topFiveUsers);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Unable to get the top five users" });
+    }
+});
 exports.default = {
     getAllUsers,
     getUserById,
@@ -160,4 +174,5 @@ exports.default = {
     logoutUser,
     updateUser,
     deleteUserById,
+    getTopThreeUsers,
 };
