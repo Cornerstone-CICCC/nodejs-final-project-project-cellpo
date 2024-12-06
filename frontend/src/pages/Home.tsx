@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col justify-evenly items-center w-screen h-full bg-red-900 bg-gradient-to-t from-blue-900 text-center">
+      <div className="flex flex-col items-center w-screen h-full text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
         <img
           src="../../public/tic-tac-toe_logo.png"
           alt="logo"
@@ -14,21 +14,21 @@ const Home = () => {
           </h1> */}
         <Link
           to="/signIn"
-          className="font-MICRO bg-green-600 text-3xl p-3 px-10 rounded-full text-slate-200 hover:bg-green-700 transition-all duration-300"
+          className="p-3 px-10 text-3xl transition-all duration-300 bg-green-600 rounded-full font-MICRO text-slate-200 hover:bg-green-700"
         >
           Sign In
         </Link>
       </div>
 
-      <main className="bg-slate-700 w-full h-full px-8">
-        <section className="flex justify-around items-center pt-5 pb-14">
+      <main className="w-full h-full px-8 bg-slate-700">
+        <section className="flex items-center justify-around pt-5 pb-14">
           <img
             src="../../public/tic-tac-toe_no-background.png"
             alt="tic-tac-toe"
             className="w-52"
           />
-          <article className="font-MICRO text-stone-200 w-1/2">
-            <h1 className="text-5xl py-5">How to play tic-tac-toe?</h1>
+          <article className="w-1/2 font-MICRO text-stone-200">
+            <h1 className="py-5 text-5xl">How to play tic-tac-toe?</h1>
             <p className="text-lg">
               The rules of Tic-Tac-Toe are very simple. The player who first
               forms a row of their marks vertically, horizontally, or diagonally
@@ -38,14 +38,14 @@ const Home = () => {
           </article>
         </section>
 
-        <section className="flex flex-row-reverse justify-around items-center pt-5">
+        <section className="flex flex-row-reverse items-center justify-around pt-5">
           <img
             src="../../public/good_effect_brains.png"
             alt="brain"
-            className="w-52 h-auto"
+            className="h-auto w-52"
           />
           <article className="font-MICRO text-stone-200">
-            <h1 className="text-5xl py-5">How good to our brains?</h1>
+            <h1 className="py-5 text-5xl">How good to our brains?</h1>
             <ol className="text-lg w-[50vw]">
               <li>
                 Enhances Strategic Thinking:
