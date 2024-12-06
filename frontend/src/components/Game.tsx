@@ -1,13 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
-const Game: React.FC = () => {
-  // states
+interface GameProps {
+  userId: string;
+  roomId: string;
+}
+
+interface MoveData {
+  board: string[];
+}
+
+let socket: Socket | null = null;
+
+const Game: React.FC<GameProps> = ({ userId, roomId }) => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(""));
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
   const [winner, setWinner] = useState<string | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
 
-  //winner logic
+  useEffect(() => {
+    socket = io("http://localhost:3010", {
+      withCredentials: true,
+    });
+
+    if (socket) {
+      socket.emit("joinRoom", { roomId, userId });
+
+      socket.on("startGame", () => {
+        // The game starts now
+        setIsGameStarted(true);
+      });
+
+      socket.on("moveMade", (data: MoveData) => {
+        setBoard(data.board);
+        // Switch player turn locally
+        setCurrentPlayer((prev) => (prev === "X" ? "O" : "X"));
+      });
+
+      socket.on("gameOver", (data: { winnerId?: string }) => {
+        if (data.winnerId) {
+          setWinner(data.winnerId === userId ? "You Win!" : "You Lose!");
+        } else {
+          setWinner("Draw!!");
+        }
+        setIsGameOver(true);
+      });
+
+      return () => {
+        socket?.disconnect();
+      };
+    }
+  }, [roomId, userId]);
+
   const checkWinner = (board: string[]): string | null => {
     const winningPatterns = [
       [0, 1, 2],
@@ -23,7 +68,7 @@ const Game: React.FC = () => {
     for (const pattern of winningPatterns) {
       const [a, b, c] = pattern;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a]; // return winner
+        return board[a]; // return winner symbol
       }
     }
 
@@ -34,45 +79,59 @@ const Game: React.FC = () => {
     return null; // no winner
   };
 
-  // click handler
   const handleCellClick = (index: number) => {
-    if (board[index] || winner || isGameOver) return; // do nothing when square is filled or game has ended
+    if (!isGameStarted || board[index] || winner || isGameOver) return;
 
     const newBoard = [...board];
-    newBoard[index] = currentPlayer; // locate current player's mark("X","O")
+    newBoard[index] = currentPlayer;
     setBoard(newBoard);
 
     const gameWinner = checkWinner(newBoard);
     if (gameWinner) {
-      setWinner(gameWinner === "Draw" ? null : gameWinner);
       setIsGameOver(true);
+      if (gameWinner === "Draw") {
+        setWinner("Draw!!");
+        socket?.emit("gameOver", { roomId });
+      } else {
+        // Determine the winner's userId
+        // Let's assume 'X' player is the first joined user and 'O' is the second
+        // For simplicity, we decide the first user who joined gets 'X'.
+        // If userId of the current player equals this user then winnerId = userId else different userId
+        const winnerId = currentPlayer === "X" ? userId : null;
+        socket?.emit("gameOver", { roomId, winnerId });
+        setWinner(winnerId ? "You Win!" : "You Lose!");
+      }
     } else {
-      setCurrentPlayer(currentPlayer === "X" ? "O" : "X"); // take a turn
+      // switch turn
+      setCurrentPlayer((prev) => (prev === "X" ? "O" : "X"));
+      socket?.emit("makeMove", { roomId, move: { board: newBoard } });
     }
   };
 
-  // reset game
   const resetGame = () => {
     setBoard(Array(9).fill(""));
     setCurrentPlayer("X");
     setWinner(null);
     setIsGameOver(false);
+    setIsGameStarted(false);
   };
 
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Tic Tac Toe</h1>
+      {!isGameStarted && <h2>Waiting for another player...</h2>}
       {winner ? (
-        <h2>{winner === "Draw" ? "Draw!!" : `Winner: ${winner}`}</h2>
-      ) : (
+        <h2>{winner}</h2>
+      ) : isGameStarted ? (
         <h2>Current Player: {currentPlayer}</h2>
-      )}
+      ) : null}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 100px)",
           gridGap: "5px",
           justifyContent: "center",
+          marginTop: "20px",
         }}
       >
         {board.map((cell, index) => (
@@ -90,7 +149,6 @@ const Game: React.FC = () => {
               cursor: "pointer",
               backgroundColor: cell ? "#d3d3d3" : "#fff",
             }}
-            className="hover:bg-slate-400"
           >
             {cell}
           </div>

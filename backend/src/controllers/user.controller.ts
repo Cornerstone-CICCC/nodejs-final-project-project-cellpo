@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import { User, IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
-import userRouter from "../routes/user.routes";
 
-// 型定義の追加
 interface AuthenticatedRequest extends Request {
   session?:
     | {
@@ -14,7 +12,6 @@ interface AuthenticatedRequest extends Request {
     | any;
 }
 
-// Get all users
 const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.find().select("-password");
@@ -25,7 +22,6 @@ const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Get user by id
 const getUserById = async (
   req: Request<{ id: string }>,
   res: Response
@@ -43,7 +39,6 @@ const getUserById = async (
   }
 };
 
-// Register
 const registerUser = async (
   req: Request<{}, {}, { username: string; password: string }>,
   res: Response
@@ -81,7 +76,6 @@ const registerUser = async (
   }
 };
 
-// Login
 const loginUser = async (
   req: Request<{}, {}, { username: string; password: string }>,
   res: Response
@@ -95,7 +89,6 @@ const loginUser = async (
     }
 
     const user = await User.findOne({ username });
-    console.log(user);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -117,7 +110,6 @@ const loginUser = async (
   }
 };
 
-// Profile
 const userProfile = async (
   req: AuthenticatedRequest,
   res: Response
@@ -142,10 +134,9 @@ const userProfile = async (
   }
 };
 
-// Logout
 const logoutUser = (req: AuthenticatedRequest, res: Response): void => {
   try {
-    (req as AuthenticatedRequest).session! = null;
+    (req as AuthenticatedRequest).session = null;
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     console.error("Logout User Error:", err);
@@ -153,7 +144,6 @@ const logoutUser = (req: AuthenticatedRequest, res: Response): void => {
   }
 };
 
-// Update user
 const updateUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -170,7 +160,6 @@ const updateUser = async (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-// Delete user by id
 const deleteUserById = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id).select(

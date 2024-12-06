@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-// Get all users
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield user_model_1.User.find().select("-password");
@@ -25,7 +24,6 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ error: "Unable to get users" });
     }
 });
-// Get user by id
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_model_1.User.findById(req.params.id).select("-password");
@@ -40,7 +38,6 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ error: `Unable to get the user` });
     }
 });
-// Register
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
@@ -68,7 +65,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).json({ error: "Unable to register user" });
     }
 });
-// Login
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
@@ -77,7 +73,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         const user = yield user_model_1.User.findOne({ username });
-        console.log(user);
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
@@ -96,7 +91,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: "Server Error" });
     }
 });
-// Profile
 const userProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -117,7 +111,6 @@ const userProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ message: "Server Error" });
     }
 });
-// Logout
 const logoutUser = (req, res) => {
     try {
         req.session = null;
@@ -128,7 +121,6 @@ const logoutUser = (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
-// Update user
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_model_1.User.findByIdAndUpdate(req.params.id, req.body, {
@@ -145,7 +137,6 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ error: `Unable to update the user` });
     }
 });
-// Delete user by id
 const deleteUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_model_1.User.findByIdAndDelete(req.params.id).select("-password");
