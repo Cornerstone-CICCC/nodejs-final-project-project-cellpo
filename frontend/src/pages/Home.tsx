@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col items-center w-screen h-full text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
+      <div className="flex flex-col items-center w-full h-full text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
         <img
           src="../../public/tic-tac-toe_logo.png"
           alt="logo"

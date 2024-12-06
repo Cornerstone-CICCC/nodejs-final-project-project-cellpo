@@ -74,7 +74,7 @@ const Play: React.FC = () => {
 
       {user && roomId && (
         <div className="mt-5">
-          <Game userId={user._id} roomId={roomId} />
+          <Game userId={user._id} roomId={roomId} setRoomId={setRoomId} />
         </div>
       )}
     </div>

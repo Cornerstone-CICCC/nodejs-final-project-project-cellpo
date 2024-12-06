@@ -4,6 +4,7 @@ import { io, Socket } from "socket.io-client";
 interface GameProps {
   userId: string;
   roomId: string;
+  setRoomId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface MoveData {
@@ -12,7 +13,7 @@ interface MoveData {
 
 let socket: Socket | null = null;
 
-const Game: React.FC<GameProps> = ({ userId, roomId }) => {
+const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(""));
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
   const [winner, setWinner] = useState<string | null>(null);
@@ -114,6 +115,7 @@ const Game: React.FC<GameProps> = ({ userId, roomId }) => {
     setWinner(null);
     setIsGameOver(false);
     setIsGameStarted(false);
+    setRoomId("");
   };
 
   return (
