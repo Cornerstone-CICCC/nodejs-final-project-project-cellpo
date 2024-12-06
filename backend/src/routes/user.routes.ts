@@ -7,6 +7,7 @@ const userRouter = Router();
 userRouter.get("/play", checkAuth, userController.userProfile);
 userRouter.get("/", checkAuth, userController.getAllUsers);
 userRouter.get("/logout", checkAuth, userController.logoutUser);
+userRouter.get("/ranking", userController.getTopThreeUsers);
 userRouter.get("/:id", checkAuth, userController.getUserById);
 
 userRouter.post("/register", userController.registerUser);

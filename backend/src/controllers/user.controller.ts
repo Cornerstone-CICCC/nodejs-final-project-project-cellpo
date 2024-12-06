@@ -176,6 +176,20 @@ const deleteUserById = async (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
+// get the top 3 user for ranking
+const getTopThreeUsers = async (req: Request, res: Response) => {
+  try {
+    const topFiveUsers = await User.find()
+      .sort({ win: -1 })
+      .limit(3)
+      .select("username matches win");
+    res.status(200).json(topFiveUsers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Unable to get the top five users" });
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
@@ -185,4 +199,5 @@ export default {
   logoutUser,
   updateUser,
   deleteUserById,
+  getTopThreeUsers,
 };

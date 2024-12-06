@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";
+import Ranking from "../components/Ranking";
 
 interface UserData {
   _id: string;
@@ -77,6 +78,7 @@ const Play: React.FC = () => {
           <Game userId={user._id} roomId={roomId} setRoomId={setRoomId} />
         </div>
       )}
+      <Ranking />
     </div>
   );
 };
