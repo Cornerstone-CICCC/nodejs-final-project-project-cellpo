@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 
-// 型定義の追加
 interface AuthenticatedRequest extends Request {
   session?: {
     isAuthenticated?: boolean;
