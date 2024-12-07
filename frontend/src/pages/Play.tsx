@@ -1,3 +1,4 @@
+// frontend/src/pages/Play.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";

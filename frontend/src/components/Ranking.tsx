@@ -1,40 +1,36 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-type Ranker = {
-  username: string;
-  win: number;
-  matches: number;
-  _id: string;
-};
-const Ranking = () => {
-  const [rankers, setRankers] = useState<Ranker[]>([]);
-  useEffect(() => {
-    const fetchRankers = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3010/api/users/ranking"
-        );
-        setRankers(response.data);
-      } catch (error) {
-        console.error("Failed to fetch ranking data:", error);
-      }
-    };
+// frontend/src/components/Ranking.tsx
+import React, { useEffect, useState } from "react";
 
-    fetchRankers();
+interface UserRank {
+  username: string;
+  matches: number;
+  win: number;
+}
+
+const Ranking: React.FC = () => {
+  const [users, setUsers] = useState<UserRank[]>([]);
+
+  const loadRanking = async () => {
+    const res = await fetch("http://localhost:3010/api/users/ranking");
+    const data = await res.json();
+    setUsers(data);
+  };
+
+  useEffect(() => {
+    loadRanking();
   }, []);
+
   return (
-    <div>
-      {rankers.map((ranker) => (
-        <div key={ranker._id}>
-          <span>Username: {ranker.username}</span>
-          <br />
-          <span>Wins: {ranker.win}</span>
-          <br />
-          <span>
-            Win Rate: {Math.round((ranker.win / ranker.matches) * 100)}%
-          </span>
-        </div>
-      ))}
+    <div className="mt-10 text-center">
+      <h2 className="text-2xl font-bold">Ranking (Top 3)</h2>
+      <ul className="mt-4">
+        {users.map((user, idx) => (
+          <li key={idx} className="mb-2">
+            {idx + 1}. {user.username} - {user.win} Wins / {user.matches}{" "}
+            Matches
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
