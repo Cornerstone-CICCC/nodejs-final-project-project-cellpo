@@ -1,3 +1,4 @@
+// backend/src/controllers/user.controller.ts
 import { Request, Response } from "express";
 import { User, IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
@@ -176,17 +177,16 @@ const deleteUserById = async (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-// get the top 3 user for ranking
 const getTopThreeUsers = async (req: Request, res: Response) => {
   try {
-    const topFiveUsers = await User.find()
+    const topThreeUsers = await User.find()
       .sort({ win: -1 })
       .limit(3)
       .select("username matches win");
-    res.status(200).json(topFiveUsers);
+    res.status(200).json(topThreeUsers);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Unable to get the top five users" });
+    res.status(500).json({ error: "Unable to get the top users" });
   }
 };
 

@@ -29,36 +29,60 @@ const setupGameSocket = (httpServer) => {
             if (!rooms[roomId]) {
                 rooms[roomId] = [];
             }
-            rooms[roomId].push({ socketId: socket.id, userId });
-            if (rooms[roomId].length === 2) {
+            const players = rooms[roomId];
+            players.push({ socketId: socket.id, userId });
+            if (players.length === 1) {
+                players[0].symbol = "X";
+            }
+            else if (players.length === 2) {
+                players[1].symbol = "O";
                 // 2人揃ったのでゲーム開始
-                io.to(roomId).emit("startGame");
-                // 両ユーザのmatchesを1増やす
-                for (const player of rooms[roomId]) {
-                    yield user_model_1.User.findByIdAndUpdate(player.userId, {
-                        $inc: { matches: 1 },
+                // 両者のmatchesを+1
+                for (const p of players) {
+                    yield user_model_1.User.findByIdAndUpdate(p.userId, { $inc: { matches: 1 } });
+                }
+                // 両プレイヤーにstartGameイベント送信
+                for (const p of players) {
+                    io.to(p.socketId).emit("startGame", {
+                        playerSymbol: p.symbol,
+                        currentPlayer: "X", // 常にXからスタート
                     });
                 }
             }
         }));
         socket.on("makeMove", (data) => {
             const { roomId, move } = data;
-            socket.to(roomId).emit("moveMade", move);
+            const players = rooms[roomId];
+            if (!players)
+                return;
+            // 現在のcurrentPlayerはクライアントからは受け取らないで、
+            // サーバーで管理しても良いが、ここでは省略的にクライアント主導で管理
+            // より厳密にするには、サーバー側でcurrentPlayerを状態管理し、
+            // 切り替えてからmoveMadeイベントを送るようにする。
+            // 次の手番を決めるため、boardをみてXとOの数を比較してturnを決める
+            const xCount = move.board.filter((c) => c === "X").length;
+            const oCount = move.board.filter((c) => c === "O").length;
+            const nextPlayer = xCount > oCount ? "O" : "X";
+            io.to(roomId).emit("moveMade", {
+                board: move.board,
+                currentPlayer: nextPlayer,
+            });
         });
         socket.on("gameOver", (data) => __awaiter(void 0, void 0, void 0, function* () {
             const { roomId, winnerId } = data;
+            const players = rooms[roomId];
+            if (!players)
+                return;
+            // 勝者がいればwinsを+1
             if (winnerId) {
-                // 勝者のwinsを1増やす
                 yield user_model_1.User.findByIdAndUpdate(winnerId, { $inc: { win: 1 } });
             }
-            // 部屋リセット
-            if (rooms[roomId]) {
-                delete rooms[roomId];
-            }
             io.to(roomId).emit("gameOver", { winnerId });
+            delete rooms[roomId];
         }));
         socket.on("disconnect", () => {
             console.log("User disconnected:", socket.id);
+            // 部屋から削除
             for (const roomId in rooms) {
                 rooms[roomId] = rooms[roomId].filter((p) => p.socketId !== socket.id);
                 if (rooms[roomId].length === 0) {
