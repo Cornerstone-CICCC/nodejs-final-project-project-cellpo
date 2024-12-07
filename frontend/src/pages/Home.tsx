@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col items-center w-full h-full text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
+      <div className="flex flex-col items-center h-screen text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
         <img
           src="../../public/tic-tac-toe_logo.png"
           alt="logo"
@@ -20,8 +20,8 @@ const Home = () => {
         </Link>
       </div>
 
-      <main className="w-full h-full px-8 bg-slate-700">
-        <section className="flex items-center justify-around pt-5 pb-14">
+      <section className="w-full h-full px-8 bg-slate-700">
+        <div className="flex items-center justify-around pt-5 pb-14">
           <img
             src="../../public/tic-tac-toe_no-background.png"
             alt="tic-tac-toe"
@@ -29,16 +29,16 @@ const Home = () => {
           />
           <article className="w-1/2 font-MICRO text-stone-200">
             <h1 className="py-5 text-5xl">How to play tic-tac-toe?</h1>
-            <p className="text-lg">
+            <p className="text-lg font-PIXELIFY">
               The rules of Tic-Tac-Toe are very simple. The player who first
               forms a row of their marks vertically, horizontally, or diagonally
               wins. On your turn, you can place your piece anywhere you like on
               the board. Compete to see who can form a row first!
             </p>
           </article>
-        </section>
+        </div>
 
-        <section className="flex flex-row-reverse items-center justify-around pt-5">
+        <div className="flex flex-row-reverse items-center justify-around py-5">
           <img
             src="../../public/good_effect_brains.png"
             alt="brain"
@@ -46,7 +46,7 @@ const Home = () => {
           />
           <article className="font-MICRO text-stone-200">
             <h1 className="py-5 text-5xl">How good to our brains?</h1>
-            <ol className="text-lg w-[50vw]">
+            <ol className="text-lg w-[50vw] font-PIXELIFY">
               <li>
                 Enhances Strategic Thinking:
                 <p>
@@ -74,8 +74,8 @@ const Home = () => {
               </li>
             </ol>
           </article>
-        </section>
-      </main>
+        </div>
+      </section>
     </>
   );
 };

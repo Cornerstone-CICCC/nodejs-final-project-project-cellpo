@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         MICRO: ['"Micro 5"', "sans-serif"],
+        PIXELIFY: ['"Pixelify Sans"', "sans-serif"],
       },
     },
   },

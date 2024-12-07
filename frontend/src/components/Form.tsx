@@ -26,7 +26,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
             errorMessage === "The Username is already used"
               ? "border-rose-500"
               : ""
-          } block w-[90%] border-2 bg-stone-700 border-none outline-none p-1 mb-8`}
+          } block w-[90%] border-2 bg-stone-700 border-none outline-none p-1 mb-8 font-PIXELIFY`}
         />
         <label htmlFor="password" className="text-3xl font-MICRO">
           Password
@@ -39,7 +39,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
           required
           className={`${
             errorMessage === "Passwords do not match" ? "border-rose-500" : ""
-          } block w-[90%] bg-stone-700 border-2 border-none outline-none p-1 mb-8`}
+          } block w-[90%] bg-stone-700 border-2 border-none outline-none p-1 mb-8 font-PIXELIFY`}
         />
 
         <button

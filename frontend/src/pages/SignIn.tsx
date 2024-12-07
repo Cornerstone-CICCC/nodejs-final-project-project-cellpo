@@ -62,7 +62,7 @@ const SignIn = () => {
   };
 
   return (
-    <main className="pt-20 bg-stone-800">
+    <main className="h-screen pt-20 bg-stone-800">
       <section className="text-stone-200">
         <Form
           onSubmit={frag ? signUpForm : loginForm}
