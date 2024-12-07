@@ -29,7 +29,7 @@ const Home = () => {
           />
           <article className="w-1/2 font-MICRO text-stone-200">
             <h1 className="py-5 text-5xl">How to play tic-tac-toe?</h1>
-            <p className="text-lg">
+            <p className="text-lg font-PIXELIFY">
               The rules of Tic-Tac-Toe are very simple. The player who first
               forms a row of their marks vertically, horizontally, or diagonally
               wins. On your turn, you can place your piece anywhere you like on
@@ -46,7 +46,7 @@ const Home = () => {
           />
           <article className="font-MICRO text-stone-200">
             <h1 className="py-5 text-5xl">How good to our brains?</h1>
-            <ol className="text-lg w-[50vw]">
+            <ol className="text-lg w-[50vw] font-PIXELIFY">
               <li>
                 Enhances Strategic Thinking:
                 <p>
