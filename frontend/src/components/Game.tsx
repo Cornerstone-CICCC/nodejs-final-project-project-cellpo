@@ -1,3 +1,4 @@
+// frontend/src/components/Game.tsx
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -9,6 +10,16 @@ interface GameProps {
 
 interface MoveData {
   board: string[];
+  currentPlayer: "X" | "O";
+}
+
+interface StartGameData {
+  playerSymbol: "X" | "O";
+  currentPlayer: "X" | "O";
+}
+
+interface GameOverData {
+  winnerId?: string;
 }
 
 let socket: Socket | null = null;
@@ -16,6 +27,7 @@ let socket: Socket | null = null;
 const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(""));
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+  const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | "">("");
   const [winner, setWinner] = useState<string | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -28,18 +40,18 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
     if (socket) {
       socket.emit("joinRoom", { roomId, userId });
 
-      socket.on("startGame", () => {
-        // The game starts now
+      socket.on("startGame", (data: StartGameData) => {
+        setPlayerSymbol(data.playerSymbol);
+        setCurrentPlayer(data.currentPlayer);
         setIsGameStarted(true);
       });
 
       socket.on("moveMade", (data: MoveData) => {
         setBoard(data.board);
-        // Switch player turn locally
-        setCurrentPlayer((prev) => (prev === "X" ? "O" : "X"));
+        setCurrentPlayer(data.currentPlayer);
       });
 
-      socket.on("gameOver", (data: { winnerId?: string }) => {
+      socket.on("gameOver", (data: GameOverData) => {
         if (data.winnerId) {
           setWinner(data.winnerId === userId ? "You Win!" : "You Lose!");
         } else {
@@ -58,33 +70,34 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
     const winningPatterns = [
       [0, 1, 2],
       [3, 4, 5],
-      [6, 7, 8], // horizontal
+      [6, 7, 8],
       [0, 3, 6],
       [1, 4, 7],
-      [2, 5, 8], // vertical
+      [2, 5, 8],
       [0, 4, 8],
-      [2, 4, 6], // diagonal
+      [2, 4, 6],
     ];
 
     for (const pattern of winningPatterns) {
       const [a, b, c] = pattern;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a]; // return winner symbol
+        return board[a];
       }
     }
 
     if (!board.includes("")) {
-      return "Draw"; // Draw result
+      return "Draw";
     }
 
-    return null; // no winner
+    return null;
   };
 
   const handleCellClick = (index: number) => {
     if (!isGameStarted || board[index] || winner || isGameOver) return;
+    if (playerSymbol !== currentPlayer) return;
 
     const newBoard = [...board];
-    newBoard[index] = currentPlayer;
+    newBoard[index] = playerSymbol;
     setBoard(newBoard);
 
     const gameWinner = checkWinner(newBoard);
@@ -94,17 +107,13 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
         setWinner("Draw!!");
         socket?.emit("gameOver", { roomId });
       } else {
-        // Determine the winner's userId
-        // Let's assume 'X' player is the first joined user and 'O' is the second
-        // For simplicity, we decide the first user who joined gets 'X'.
-        // If userId of the current player equals this user then winnerId = userId else different userId
-        const winnerId = currentPlayer === "X" ? userId : null;
+        // 勝利者をサーバーが判断できるよう、現在はplayerSymbolと紐付け
+        // 実際にはサーバーでroom管理し、X/OとユーザーIDの対応を記録するべき
+        const winnerId = userId;
         socket?.emit("gameOver", { roomId, winnerId });
-        setWinner(winnerId ? "You Win!" : "You Lose!");
+        setWinner("You Win!");
       }
     } else {
-      // switch turn
-      setCurrentPlayer((prev) => (prev === "X" ? "O" : "X"));
       socket?.emit("makeMove", { roomId, move: { board: newBoard } });
     }
   };
@@ -115,6 +124,7 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
     setWinner(null);
     setIsGameOver(false);
     setIsGameStarted(false);
+    setPlayerSymbol("");
     setRoomId("");
   };
 
@@ -125,7 +135,10 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
       {winner ? (
         <h2>{winner}</h2>
       ) : isGameStarted ? (
-        <h2>Current Player: {currentPlayer}</h2>
+        <h2>
+          Current Player: {currentPlayer}
+          {playerSymbol === currentPlayer ? " (Your Turn)" : ""}
+        </h2>
       ) : null}
       <div
         style={{
