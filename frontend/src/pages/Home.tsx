@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
 
 const Home = () => {
   return (
@@ -12,15 +13,12 @@ const Home = () => {
         {/* <h1 className="mt-6 text-3xl font-extrabold text-center font-MICRO text-stone-200">
           Welcome to Home Page
           </h1> */}
-        <Link
-          to="/signIn"
-          className="p-3 px-10 text-3xl transition-all duration-300 bg-green-600 rounded-full font-MICRO text-slate-200 hover:bg-green-700"
-        >
-          Sign In
+        <Link to="/signIn">
+          <Button>Sign In</Button>
         </Link>
       </div>
 
-      <section className="w-full h-full px-8 bg-slate-700">
+      <section className="w-full h-full px-8 bg-stone-800">
         <div className="flex items-center justify-around pt-5 pb-14">
           <img
             src="../../public/tic-tac-toe_no-background.png"

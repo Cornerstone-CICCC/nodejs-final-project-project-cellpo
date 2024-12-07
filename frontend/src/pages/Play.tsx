@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";
-import Ranking from "../components/Ranking";
+// import Button from "../components/Button";
 
 interface UserData {
   _id: string;
@@ -47,39 +47,46 @@ const Play: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="py-24 text-stone-200 bg-stone-800">
       <div className="flex items-center justify-center gap-4 mt-1">
         {user && (
           <h1 className="text-3xl font-extrabold">
-            {user.username}'s Stats: {user.matches} Matches / {user.win} Wins
+            {user.username.toUpperCase()}'s Stats: {user.matches} Matches /{" "}
+            {user.win} Wins
           </h1>
         )}
-        <button
-          type="button"
-          onClick={logOut}
-          className="px-2 border-2 border-blue-600 rounded-md hover:text-gray-50 hover:bg-blue-600"
-        >
-          Log Out
-        </button>
+
+        {/* <Button onclick={logOut}>Log Out</Button> */}
       </div>
 
       <div className="mt-5 text-center">
-        <h2>Enter Room ID to Start the Game</h2>
+        {/* <h2>Enter Room ID to Start the Game</h2> */}
         <input
           type="text"
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
-          className="px-2 py-1 border"
-          placeholder="Room ID"
+          className="px-2 py-1 border-none outline-none font-PIXELIFY bg-stone-600 text-stone-200"
+          placeholder="Enter Room ID"
         />
       </div>
 
       {user && roomId && (
         <div className="mt-5">
-          <Game userId={user._id} roomId={roomId} setRoomId={setRoomId} />
+          <Game
+            userId={user._id}
+            username={user.username}
+            roomId={roomId}
+            setRoomId={setRoomId}
+          />
         </div>
       )}
-      <Ranking />
+
+      <button
+        onClick={logOut}
+        className="block p-3 px-10 mx-auto mt-10 text-3xl transition-all duration-300 bg-green-600 rounded-full font-MICRO text-slate-200 hover:bg-green-700"
+      >
+        Log out
+      </button>
     </div>
   );
 };
