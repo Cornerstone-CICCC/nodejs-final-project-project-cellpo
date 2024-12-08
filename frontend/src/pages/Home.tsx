@@ -6,7 +6,7 @@ const Home = () => {
     <>
       <div className="flex flex-col items-center h-screen text-center bg-red-900 justify-evenly bg-gradient-to-t from-blue-900">
         <img
-          src="../../public/tic-tac-toe_logo.png"
+          src="../../public/tic-tac-toe_lg-no_background.png"
           alt="logo"
           className="w-80"
         />

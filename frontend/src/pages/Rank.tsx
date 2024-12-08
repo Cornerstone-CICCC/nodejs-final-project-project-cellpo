@@ -26,7 +26,7 @@ const Ranking: React.FC = () => {
   return (
     <div className="min-h-screen pt-24 bg-stone-800 font-MICRO">
       <h2 className="ml-16 text-5xl font-bold text-green-600">Ranking</h2>
-      <ol className="mt-10 text-center">
+      <ol className="mt-32 text-center">
         {users.map((user, idx) => (
           <li
             key={idx}
