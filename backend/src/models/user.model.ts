@@ -5,6 +5,7 @@ export interface IUser extends Document {
   password: string;
   matches: number;
   win: number;
+  // winRate: number;
   signUpDate: Date;
 }
 
@@ -13,6 +14,7 @@ const UserSchema: Schema = new Schema({
   password: { type: String, required: true },
   matches: { type: Number, default: 0 },
   win: { type: Number, default: 0 },
+  // winRate: { type: Number, default: 0 },
   signUpDate: { type: Date, default: Date.now },
 });
 

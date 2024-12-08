@@ -8,11 +8,11 @@ const Header = () => {
       </NavLink>
 
       <nav className="flex gap-5 text-sm">
-        <NavLink to={"/signIn"} className="text-lg text-stone-300">
+        <NavLink to={"/ranking"} className="text-lg text-stone-300">
           Ranking
         </NavLink>
         <NavLink to={"/signIn"} className="text-lg text-stone-300">
-          Sign In
+          Login
         </NavLink>
       </nav>
     </header>

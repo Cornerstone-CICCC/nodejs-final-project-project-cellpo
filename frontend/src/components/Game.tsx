@@ -4,6 +4,7 @@ import { io, Socket } from "socket.io-client";
 
 interface GameProps {
   userId: string;
+  username: string;
   roomId: string;
   setRoomId: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -24,7 +25,7 @@ interface GameOverData {
 
 let socket: Socket | null = null;
 
-const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
+const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(""));
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | "">("");
@@ -53,7 +54,9 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
 
       socket.on("gameOver", (data: GameOverData) => {
         if (data.winnerId) {
-          setWinner(data.winnerId === userId ? "You Win!" : "You Lose!");
+          setWinner(
+            data.winnerId === userId ? "You Win! :)" : "You Lose... X("
+          );
         } else {
           setWinner("Draw!!");
         }
@@ -111,7 +114,7 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
         // 実際にはサーバーでroom管理し、X/OとユーザーIDの対応を記録するべき
         const winnerId = userId;
         socket?.emit("gameOver", { roomId, winnerId });
-        setWinner("You Win!");
+        setWinner("You Win!😊");
       }
     } else {
       socket?.emit("makeMove", { roomId, move: { board: newBoard } });
@@ -130,49 +133,90 @@ const Game: React.FC<GameProps> = ({ userId, roomId, setRoomId }) => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Tic Tac Toe</h1>
-      {!isGameStarted && <h2>Waiting for another player...</h2>}
+      {/* <h1>Tic Tac Toe</h1> */}
+      {!isGameStarted && (
+        <h2 className="text-2xl font-MICRO">Waiting for another player...</h2>
+      )}
       {winner ? (
-        <h2>{winner}</h2>
+        <h2 className="mt-10 text-4xl font-MICRO">{winner}</h2>
       ) : isGameStarted ? (
-        <h2>
-          Current Player: {currentPlayer}
-          {playerSymbol === currentPlayer ? " (Your Turn)" : ""}
+        <h2 className="mt-10 text-5xl font-MICRO">
+          Current Player:
+          <span
+            className={`${
+              currentPlayer === "X" ? "text-red-600" : "text-blue-600"
+            }`}
+          >
+            {currentPlayer}
+          </span>
+          {/* {playerSymbol === currentPlayer ? " (Your Turn)" : ""} */}
         </h2>
       ) : null}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 100px)",
-          gridGap: "5px",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
-      >
-        {board.map((cell, index) => (
-          <div
-            key={index}
-            onClick={() => handleCellClick(index)}
-            style={{
-              width: "100px",
-              height: "100px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "24px",
-              border: "1px solid black",
-              cursor: "pointer",
-              backgroundColor: cell ? "#d3d3d3" : "#fff",
-            }}
+      <div className="grid items-baseline grid-cols-3">
+        <div>
+          <h2
+            className={`font-MICRO m-auto ${
+              playerSymbol === "X" ? "bg-red-600" : "bg-blue-600"
+            } ${
+              playerSymbol === currentPlayer
+                ? "text-5xl w-40"
+                : "text-xl text-stone-500 brightness-50 w-24"
+            }`}
           >
-            {cell}
-          </div>
-        ))}
+            {username}
+          </h2>
+          <p>
+            {playerSymbol === currentPlayer ? (
+              <span className="block text-5xl text-green-600 font-MICRO">
+                Your Turn
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
+        </div>
+
+        <div className="grid justify-center grid-cols-3 gap-2 mt-20 bg-green-600 w-[312px] mx-auto shadow-green-600">
+          {board.map((cell, index) => (
+            <div
+              key={index}
+              onClick={() => handleCellClick(index)}
+              className={`w-[100px] h-[100px] bg-stone-800 flex items-center justify-center  font-PIXELIFY text-8xl ${
+                cell === "X" ? "text-red-600" : "text-blue-600"
+              } hover:bg-stone-700`}
+            >
+              {cell}
+            </div>
+          ))}
+        </div>
+        <div>
+          <h2
+            className={`font-MICRO m-auto ${
+              playerSymbol !== "X" ? "bg-red-600" : "bg-blue-600"
+            } ${
+              playerSymbol !== currentPlayer
+                ? "text-5xl w-40"
+                : "text-xl text-stone-500 brightness-50 w-24"
+            }`}
+          >
+            opponent
+          </h2>
+          <p>
+            {playerSymbol !== currentPlayer ? (
+              <span className="block text-5xl text-green-600 font-MICRO">
+                Your Turn
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
+        </div>
       </div>
       {isGameOver && (
         <button
           onClick={resetGame}
-          style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}
+          // style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}
+          className="p-3 text-2xl mt-14 bg-stone-500 font-MICRO"
         >
           Reset Game
         </button>

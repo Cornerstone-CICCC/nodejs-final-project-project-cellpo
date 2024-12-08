@@ -181,6 +181,7 @@ const getTopThreeUsers = async (req: Request, res: Response) => {
   try {
     const topThreeUsers = await User.find()
       .sort({ win: -1 })
+      // .sort({ winRate: -1 })
       .limit(3)
       .select("username matches win");
     res.status(200).json(topThreeUsers);

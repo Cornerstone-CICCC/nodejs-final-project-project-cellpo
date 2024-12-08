@@ -40,6 +40,7 @@ const UserSchema = new mongoose_1.Schema({
     password: { type: String, required: true },
     matches: { type: Number, default: 0 },
     win: { type: Number, default: 0 },
+    // winRate: { type: Number, default: 0 },
     signUpDate: { type: Date, default: Date.now },
 });
 exports.User = mongoose_1.default.model("User", UserSchema);

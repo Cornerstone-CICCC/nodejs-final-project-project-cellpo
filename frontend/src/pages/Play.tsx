@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";
-import Ranking from "../components/Ranking";
+// import Button from "../components/Button";
 
 interface UserData {
   _id: string;
@@ -47,39 +47,57 @@ const Play: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div className="flex items-center justify-center gap-4 mt-1">
-        {user && (
-          <h1 className="text-3xl font-extrabold">
-            {user.username}'s Stats: {user.matches} Matches / {user.win} Wins
-          </h1>
-        )}
-        <button
-          type="button"
-          onClick={logOut}
-          className="px-2 border-2 border-blue-600 rounded-md hover:text-gray-50 hover:bg-blue-600"
-        >
-          Log Out
-        </button>
-      </div>
+    <div className="min-h-screen py-24 text-stone-200 bg-stone-800">
+      {user && (
+        <div className="flex justify-around">
+          <div className="flex items-center justify-center gap-4 mt-1 text-xl font-MICRO">
+            <h1 className="mr-5 text-3xl">
+              <span className="uppercase">{user.username}</span>'s Stats
+            </h1>
+            <table className="border border-spacing-2">
+              <tr className="border border-separate">
+                <th className="p-2 text-center border-4">matches</th>
+                <th className="p-2 text-center border-4">wins</th>
+              </tr>
+              <tr className="border">
+                <td className="p-2 text-center border-4">{user.matches}</td>
+                <td className="p-2 text-center border-4">{user.win}</td>
+              </tr>
+            </table>
+          </div>
+
+          <button
+            onClick={logOut}
+            className="text-3xl font-MICRO text-stone-500 hover:text-stone-400"
+          >
+            Log out
+          </button>
+        </div>
+      )}
+
+      {/* <Button onclick={logOut}>Log Out</Button> */}
 
       <div className="mt-5 text-center">
-        <h2>Enter Room ID to Start the Game</h2>
+        {/* <h2>Enter Room ID to Start the Game</h2> */}
         <input
           type="text"
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
-          className="px-2 py-1 border"
-          placeholder="Room ID"
+          className="px-2 py-1 border-none outline-none mt-14 font-PIXELIFY bg-stone-600 text-stone-200"
+          placeholder="Enter Room ID"
         />
       </div>
 
       {user && roomId && (
-        <div className="mt-5">
-          <Game userId={user._id} roomId={roomId} setRoomId={setRoomId} />
+        <div className="mt-3">
+          <Game
+            userId={user._id}
+            username={user.username}
+            roomId={roomId}
+            setRoomId={setRoomId}
+          />
         </div>
       )}
-      <Ranking />
     </div>
   );
 };

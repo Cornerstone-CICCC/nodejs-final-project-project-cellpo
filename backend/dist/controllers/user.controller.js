@@ -155,6 +155,7 @@ const getTopThreeUsers = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const topThreeUsers = yield user_model_1.User.find()
             .sort({ win: -1 })
+            // .sort({ winRate: -1 })
             .limit(3)
             .select("username matches win");
         res.status(200).json(topThreeUsers);
