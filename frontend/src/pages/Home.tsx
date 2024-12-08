@@ -10,15 +10,12 @@ const Home = () => {
           alt="logo"
           className="w-80"
         />
-        {/* <h1 className="mt-6 text-3xl font-extrabold text-center font-MICRO text-stone-200">
-          Welcome to Home Page
-          </h1> */}
         <Link to="/signIn">
           <Button>Sign In</Button>
         </Link>
       </div>
 
-      <section className="w-full h-full px-8 bg-stone-800">
+      <section className="w-full h-full p-8 bg-stone-800">
         <div className="flex items-center justify-around pt-5 pb-14">
           <img
             src="../../public/tic-tac-toe_no-background.png"

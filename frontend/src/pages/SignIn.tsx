@@ -53,6 +53,7 @@ const SignIn = () => {
       }),
     });
     const data = await res.json();
+    setErrorMessage(data.message);
     console.log(data);
   };
 
@@ -71,7 +72,7 @@ const SignIn = () => {
         />
         {errorMessage && (
           <div className="flex items-center mx-auto text-rose-600 w-[90%]">
-            <span> {errorMessage}</span>
+            <span className="text-2xl font-MICRO">{errorMessage}</span>
           </div>
         )}
 
@@ -84,7 +85,7 @@ const SignIn = () => {
             {frag ? (
               <span className="text-red-300 font-MICRO"> Log In</span>
             ) : (
-              <span className="text-red-300 font-MICRO"> Sing Up</span>
+              <span className="text-red-300 font-MICRO"> Sign Up</span>
             )}
           </span>
         </article>

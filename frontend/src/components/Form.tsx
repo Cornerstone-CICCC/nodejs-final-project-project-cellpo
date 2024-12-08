@@ -46,7 +46,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, frag, errorMessage }) => {
           type="submit"
           className="p-2 px-4 text-2xl bg-blue-700 text-stone-200 font-MICRO"
         >
-          {frag ? "Sing Up" : "Log In"}
+          {frag ? "Sign Up" : "Log In"}
         </button>
       </form>
     </div>

@@ -12,7 +12,7 @@ const Header = () => {
           Ranking
         </NavLink>
         <NavLink to={"/signIn"} className="text-lg text-stone-300">
-          Sign In
+          Login
         </NavLink>
       </nav>
     </header>

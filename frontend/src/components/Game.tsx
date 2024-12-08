@@ -54,7 +54,9 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
 
       socket.on("gameOver", (data: GameOverData) => {
         if (data.winnerId) {
-          setWinner(data.winnerId === userId ? "You Win!" : "You Lose!");
+          setWinner(
+            data.winnerId === userId ? "You Win! :)" : "You Lose... X("
+          );
         } else {
           setWinner("Draw!!");
         }
@@ -112,7 +114,7 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
         // 実際にはサーバーでroom管理し、X/OとユーザーIDの対応を記録するべき
         const winnerId = userId;
         socket?.emit("gameOver", { roomId, winnerId });
-        setWinner("You Win!");
+        setWinner("You Win!😊");
       }
     } else {
       socket?.emit("makeMove", { roomId, move: { board: newBoard } });
@@ -132,23 +134,32 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
   return (
     <div style={{ textAlign: "center" }}>
       {/* <h1>Tic Tac Toe</h1> */}
-      {!isGameStarted && <h2>Waiting for another player...</h2>}
+      {!isGameStarted && (
+        <h2 className="text-2xl font-MICRO">Waiting for another player...</h2>
+      )}
       {winner ? (
-        <h2>{winner}</h2>
+        <h2 className="mt-10 text-4xl font-MICRO">{winner}</h2>
       ) : isGameStarted ? (
-        <h2>
-          Current Player: {currentPlayer}
-          {playerSymbol === currentPlayer ? " (Your Turn)" : ""}
+        <h2 className="mt-10 text-5xl font-MICRO">
+          Current Player:
+          <span
+            className={`${
+              currentPlayer === "X" ? "text-red-600" : "text-blue-600"
+            }`}
+          >
+            {currentPlayer}
+          </span>
+          {/* {playerSymbol === currentPlayer ? " (Your Turn)" : ""} */}
         </h2>
       ) : null}
       <div className="grid items-baseline grid-cols-3">
         <div>
           <h2
-            className={`font-MICRO w-50 m-auto ${
+            className={`font-MICRO m-auto ${
               playerSymbol === "X" ? "bg-red-600" : "bg-blue-600"
             } ${
               playerSymbol === currentPlayer
-                ? "text-5xl"
+                ? "text-5xl w-40"
                 : "text-xl text-stone-500 brightness-50 w-24"
             }`}
           >
@@ -180,11 +191,11 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
         </div>
         <div>
           <h2
-            className={`font-MICRO w-50 m-auto ${
+            className={`font-MICRO m-auto ${
               playerSymbol !== "X" ? "bg-red-600" : "bg-blue-600"
             } ${
               playerSymbol !== currentPlayer
-                ? "text-5xl"
+                ? "text-5xl w-40"
                 : "text-xl text-stone-500 brightness-50 w-24"
             }`}
           >
@@ -193,7 +204,7 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
           <p>
             {playerSymbol !== currentPlayer ? (
               <span className="block text-5xl text-green-600 font-MICRO">
-                Your Turn{" "}
+                Your Turn
               </span>
             ) : (
               ""
@@ -204,7 +215,8 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
       {isGameOver && (
         <button
           onClick={resetGame}
-          style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}
+          // style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}
+          className="p-3 text-2xl mt-14 bg-stone-500 font-MICRO"
         >
           Reset Game
         </button>
