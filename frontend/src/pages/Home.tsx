@@ -11,7 +11,7 @@ const Home = () => {
           className="w-80"
         />
         <Link to="/signIn">
-          <Button>Sign In</Button>
+          <Button>Login</Button>
         </Link>
       </div>
 
