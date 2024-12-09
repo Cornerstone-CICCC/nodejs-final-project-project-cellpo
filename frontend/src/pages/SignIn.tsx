@@ -54,6 +54,7 @@ const SignIn = () => {
     });
     const data = await res.json();
     setErrorMessage(data.message);
+    setFrag((prev) => !prev);
     console.log(data);
   };
 

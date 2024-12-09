@@ -181,7 +181,7 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
             <div
               key={index}
               onClick={() => handleCellClick(index)}
-              className={`w-[100px] h-[100px] bg-stone-800 flex items-center justify-center  font-PIXELIFY text-8xl ${
+              className={`w-[100px] h-[100px] bg-stone-800 flex items-center justify-center font-PIXELIFY text-8xl select-none ${
                 cell === "X" ? "text-red-600" : "text-blue-600"
               } hover:bg-stone-700`}
             >
