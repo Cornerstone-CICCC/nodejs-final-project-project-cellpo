@@ -129,6 +129,7 @@ const Game: React.FC<GameProps> = ({ userId, username, roomId, setRoomId }) => {
     setIsGameStarted(false);
     setPlayerSymbol("");
     setRoomId("");
+    window.location.reload();
   };
 
   return (
